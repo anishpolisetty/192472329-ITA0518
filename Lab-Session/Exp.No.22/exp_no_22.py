@@ -12,7 +12,13 @@ else:
     kernel = np.array([[0, 1, 0],
                        [1, -8, 1],
                        [0, 1, 0]])
-    sharpened = cv2.filter2D(image, -1, kernel)
+    
+    # Convert image to float32 before filtering to handle negative values
+    image_float = np.float32(image)
+    sharpened_float = cv2.filter2D(image_float, -1, kernel)
+    
+    # Clip values to 0-255 and convert back to uint8
+    sharpened = np.clip(sharpened_float, 0, 255).astype(np.uint8)
 
     # Convert BGR to RGB for matplotlib display
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
